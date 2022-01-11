@@ -1,0 +1,43 @@
+{% extends "base.html" %} {% block content %}
+
+<div class="row">
+  <div class="col-md-6">
+    
+{% for field, errors in form.errors.items() %}
+<small class="col-md-10 form-text text-danger mb-1"> {{ ', '.join(errors) }} </small>
+{% endfor %} 
+
+
+<form class="form-horizontal mb-5" method="post" enctype="multipart/form-data">
+    {{ form.hidden_tag() }}
+  <div class="form-group">
+    {{form.title.label(class="control-label col-md-2")}}
+    <div class="col-md-6 col-sm-10">{{form.title(class="form-control")}}</div>
+  </div>
+
+  <div class="form-group">
+    {{form.author.label(class="control-label col-md-2")}}
+    <div class="col-md-6 col-sm-10">{{form.author(class="form-control")}}</div>
+  </div>
+
+  <div class="form-group">
+    {{form.body.label(class="control-label col-md-2")}}
+    <div class="col-md-6 col-sm-10">{{form.body(class="form-control")}}</div>
+  </div>
+  <div class="form-group">
+    <div class="col-md-6 col-sm-10">
+      {{form.submit(class="btn btn-outline-primary btn-lg")}}
+    </div>
+  </div>
+
+
+  </div>
+  <div class="col-md-6">
+    <img id="img" src="{{ form.image.data }}" style="width: 200px;height:200px;" />
+    <div class="form-group">
+      <div class="col-md-6 col-sm-10 pl-0 pt-1">{{form.image(class="form-control", onchange="document.getElementById('img').src = window.URL.createObjectURL(this.files[0])")}}</div>
+    </div>
+  </div>
+</div>
+</form>
+{% endblock %}

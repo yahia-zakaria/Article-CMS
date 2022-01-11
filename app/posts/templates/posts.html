@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% block content %}
+<h1 class="text-center">
+    Posts
+</h1>
+
+<table id="dt_posts" class="ui celled table" style="width:100%">
+    <thead>
+        <tr>
+            <td>#</td>
+            <td>Title</td>
+            <td>Author</td>
+            <td>Body</td>
+            <td>Image</td>
+            <td>Edit</td>
+        </tr>
+    </thead>
+    <tbody>
+        {% for post in posts %}
+        <tr>
+            <td>{{ post[0] }}</td>
+            <td>{{ post[1] }}</td>
+            <td>{{ post[2] }}</td>
+            <td>{{ post[3] }}</td>
+            <td><img src="{{ post[4] }}" style="width:100px;height:100px"></td>
+            <td><a class="btn btn-outline-secondary" href="{{ url_for('posts.edit_post', id = post[0]) }}" + {{post[0]}}>Edit</a></td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

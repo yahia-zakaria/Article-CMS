@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <link
+      rel="stylesheet"
+      href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+      integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
+      crossorigin="anonymous"
+    />
+    <link
+      rel="stylesheet"
+      href="https://use.fontawesome.com/releases/v5.3.1/css/all.css"
+      integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU"
+      crossorigin="anonymous"
+    />
+    <link rel="stylesheet" href="../../../static/login.css" />
+    <title>Articl CMS - Registeration</title>
+  </head>
+  <body>
+    <div id="logreg-forms">
+      <h1 class="text-center" style="margin-bottom: 10%;">Registeration Form</h1>
+      <form method="post" class="form-signup">
+        {{ form.hidden_tag() }} {{form.email(class="form-control",
+        placeholder="Email address", autofocus="")}}
+        {{form.password(class="form-control", placeholder="Password",
+        autofocus="")}} {{form.confirm_password(class="form-control",
+        placeholder="Repeat Password", autofocus="")}} {{form.submit(class="btn
+        btn-primary btn-block")}}
+        <a href="{{url_for('account.login')}}" id="cancel_signup"
+          ><i class="fas fa-angle-left"></i> Back</a
+        >
+      </form>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script
+      src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+      integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+      crossorigin="anonymous"
+    ></script>
+  </body>
+</html>
