@@ -11,10 +11,10 @@ login_manager.login_view = 'account.login'
 
 app.config["SECRET_KEY"] = "YAHIAZAKARIAEDRISSYAGOUB" 
 
-db_host = '.'
+db_host = 'az-204-srvr.database.windows.net'
 db_name = 'Article'
-db_user = 'sa'
-db_password = '123456'
+db_user = 'yahia'
+db_password = '36RR45ey@@'
 connection_string = 'Driver={SQL Server};Server=' + db_host + ';Database=' + db_name + ';UID=' + db_user + ';PWD=' + db_password + ';'
 conn = pyodbc.connect(connection_string)
 
