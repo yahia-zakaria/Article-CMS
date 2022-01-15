@@ -15,7 +15,7 @@ db_host = 'az-204-srvr.database.windows.net'
 db_name = 'Article'
 db_user = 'yahia'
 db_password = '36RR45ey@@'
-connection_string = 'Driver={'+ pyodbc.drivers()[3] +'};Server=' + db_host + ';Database=' + db_name + ';UID=' + db_user + ';PWD=' + db_password + ';'
+connection_string = 'Driver={ODBC Driver 17 for SQL Server};Server=' + db_host + ';Database=' + db_name + ';UID=' + db_user + ';PWD=' + db_password + ';'
 conn = pyodbc.connect(connection_string)
 
 from app.posts.views import posts_blueprint
