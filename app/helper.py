@@ -1,6 +1,4 @@
-import os
-from PIL import Image
-from flask import current_app
+from app import blob_service, blob_container, blob_url
 import uuid
 
 
@@ -9,11 +7,8 @@ def add_image(uploaded_image):
     ext = filename.split('.')[-1]
 
     storage_filename = str(uuid.uuid1()) + '.' + ext 
-    filepath = os.path.join(os.path.dirname(os.path.abspath(__name__)), 'static/images', storage_filename)
 
-    output_size = (400, 400)
-    image = Image.open(uploaded_image)
-    image.thumbnail(output_size)
-    image.save(filepath)
+    blob_client = blob_service.get_blob_client(container=blob_container, blob=storage_filename)
+    blob_client.upload_blob(uploaded_image)
 
-    return storage_filename
+    return blob_url + storage_filename

@@ -23,12 +23,12 @@
     <div id="logreg-forms">
       <h1 class="text-center" style="margin-bottom: 10%;">Registeration Form</h1>
       <form method="post" class="form-signup">
-        {{ form.hidden_tag() }} {{form.email(class="form-control",
+        {{ form.hidden_tag() }} {{form.email(class="form-control mb-1",
         placeholder="Email address", autofocus="")}}
-        {{form.password(class="form-control", placeholder="Password",
-        autofocus="")}} {{form.confirm_password(class="form-control",
+        {{form.password(class="form-control mb-1", placeholder="Password",
+        autofocus="")}} {{form.confirm_password(class="form-control mb-1",
         placeholder="Repeat Password", autofocus="")}} {{form.submit(class="btn
-        btn-primary btn-block")}}
+        btn-primary btn-block mb-1")}}
         <a href="{{url_for('account.login')}}" id="cancel_signup"
           ><i class="fas fa-angle-left"></i> Back</a
         >

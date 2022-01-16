@@ -18,9 +18,9 @@
             <button class="btn btn-secondary btn-block" type="button"><i class="fab fa-microsoft"></i> Sign in with Microsoft</button>
         </div>
         <p style="text-align:center"> OR  </p>
-        {{form.username(class="form-control", placeholder="Email address", autofocus="")}}
-        {{form.password(class="form-control", placeholder="password", autofocus="")}}
-        {{form.submit(class="btn btn-success btn-block")}}
+        {{form.username(class="form-control mb-1", placeholder="Email address", autofocus="")}}
+        {{form.password(class="form-control mb-1", placeholder="password", autofocus="")}}
+        {{form.submit(class="btn btn-success btn-block mb-1")}}
         <hr>
         <!-- <p>Don't have an account!</p>  -->
         <a class="btn btn-primary btn-block text-light" type="button" id="btn-signup" href="{{url_for('account.register')}}"><i class="fas fa-user-plus"></i> Sign up New Account</a>

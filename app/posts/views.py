@@ -19,7 +19,7 @@ def add_post():
     form = AddPostForm()
     if request.method == 'POST' and form.validate_on_submit():
         image_data = form.image.data
-        image_file_path = '/static/images/' + add_image(image_data)
+        image_file_path = add_image(image_data)
         post = Post(form.title.data, form.author.data,
                     form.body.data, image_file_path)
         post.add_post()
@@ -40,7 +40,7 @@ def edit_post(id):
     if request.method == 'POST' and form.validate_on_submit():
         if form.image.data:
             image_data = form.image.data
-            image_file_path = '/static/images/' + add_image(image_data)
+            image_file_path =  add_image(image_data)
         else:
             image_file_path = post[4]
         post = Post(id=post[0], title=form.title.data, author=form.author.data,

@@ -22,7 +22,7 @@
             <td>{{ post[1] }}</td>
             <td>{{ post[2] }}</td>
             <td>{{ post[3] }}</td>
-            <td><img src="{{ post[4] }}" style="width:100px;height:100px"></td>
+            <td><a target="blank" href="{{ post[4] }}"><img src="{{ post[4] }}" style="width:100px;height:100px"></a></td>
             <td><a class="btn btn-outline-secondary" href="{{ url_for('posts.edit_post', id = post[0]) }}" + {{post[0]}}>Edit</a></td>
         </tr>
         {% endfor %}
