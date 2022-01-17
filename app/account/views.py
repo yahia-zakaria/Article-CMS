@@ -1,8 +1,11 @@
-from flask import render_template, request, redirect, flash, request, Blueprint, url_for
+from flask import render_template, request, redirect, flash, request, Blueprint, url_for, session
 from app.account.forms import RegistrationForm, LoginForm
 from wtforms import ValidationError
 from flask_login import login_user, logout_user, login_required, current_user
 from models import User
+import msal
+from app.config import Config
+import uuid
 
 account_blueprint = Blueprint("account", __name__, template_folder="templates/")
 
@@ -35,10 +38,57 @@ def login():
         else:
             raise ValidationError("Invalid username or password")
 
-    return render_template('login.html', form=form)
+    auth_url = _build_auth_url(scopes=Config.SCOPE, state=session.get('state'))
+    print("##############################################")
+    print(auth_url)
+    print("##############################################")
+    return render_template('login.html', form=form, title='Sign In', auth_url=auth_url)
 
 @account_blueprint.route('/logout', methods=['GET', 'POST'])
 @login_required
 def logout():
     logout_user()
     return redirect(url_for('account.login'))
+
+
+def _save_cache(cache):
+  if cache.has_state_changed:
+     session['token_cache'] = cache.serialize()
+
+def _build_msal_app(cache=None, authority=None):
+    return msal.ConfidentialClientApplication(
+     Config.CLIENT_ID, authority=authority or Config.AUTHORITY,
+    client_credential=Config.CLIENT_SECRET, token_cache=cache)
+
+
+def _build_auth_url(authority=None, scopes=None, state=None):
+    return _build_msal_app(authority=authority).get_authorization_request_url(
+    scopes or [],
+    state=state or str(uuid.uuid4()),
+    redirect_uri=url_for('account.authorized', _external=True, _scheme='https'))
+
+def _load_cache():
+    cache = msal.SerializableTokenCache()
+    if session.get("token_cache"):
+        cache.deserialize(session["token_cache"])
+    return cache
+
+@account_blueprint.route(Config.REDIRECT_PATH) # Its absolute URL must match your app's
+def authorized():
+  if request.args.get('state') != session.get('state'):
+   return redirect(url_for('account.login')) # Failed, go back home
+  if 'error' in request.args: # Authentication/Authorization failure
+    return render_template('auth_error.html', result=request.args)
+  if request.args.get('code'):
+    cache = _load_cache()
+    result = _build_msal_app(cache=cache).acquire_token_by_authorization_code(
+     request.args['code'],
+     scopes=Config.SCOPE,
+     redirect_uri=url_for('account.authorized', _external=True, _scheme='https'))
+         
+    if 'error' in result:
+      return render_template('auth_error.html', result=result)
+    session['user'] = result.get('id_token_claims')
+    user = User(0)
+    login_user(user)
+    _save_cache(cache)

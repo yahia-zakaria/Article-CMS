@@ -15,7 +15,7 @@
         {{ form.hidden_tag() }}
         <h1 class="h3 mb-3 font-weight-normal" style="text-align: center"> Sign in</h1>
         <div class="social-login">
-            <button class="btn btn-secondary btn-block" type="button"><i class="fab fa-microsoft"></i> Sign in with Microsoft</button>
+            <a class="btn btn-secondary btn-block" href="{{auth_url}}"><i class="fab fa-microsoft"></i> Sign in with Microsoft</a>
         </div>
         <p style="text-align:center"> OR  </p>
         {{form.username(class="form-control mb-1", placeholder="Email address", autofocus="")}}

@@ -34,3 +34,4 @@ wincertstore==0.2
 WTForms==2.1
 pyodbc
 azure-storage-blob
+msal
