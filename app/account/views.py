@@ -90,6 +90,6 @@ def authorized():
     if 'error' in result:
       return render_template('auth_error.html', result=result)
     session['user'] = result.get('id_token_claims')
-    user = User(0)
+    user = User(email=result.get("id_token_claims", {}).get("preferred_username"), password=str(uuid.uuid4()), id=str(uuid.uuid4()))
     login_user(user)
     _save_cache(cache)
