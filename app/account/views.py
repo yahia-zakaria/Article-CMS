@@ -62,9 +62,11 @@ def _build_msal_app(cache=None, authority=None):
 
 
 def _build_auth_url(authority=None, scopes=None, state=None):
+    uid = str(uuid.uuid4())
+    session["state"] = uid
     return _build_msal_app(authority=authority).get_authorization_request_url(
     scopes or [],
-    state=state or str(uuid.uuid4()),
+    state=state or uid,
     redirect_uri=url_for('account.authorized', _external=True, _scheme='https'))
 
 def _load_cache():
