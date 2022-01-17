@@ -24,6 +24,7 @@ def register():
 @account_blueprint.route('/login', methods=['GET', 'POST'])
 def login():
     form = LoginForm()
+    session["state"] = str(uuid.uuid4())
     if request.method == 'POST' and form.validate():
         user = User.get_user(form.username.data)
         if user == None:
@@ -38,7 +39,7 @@ def login():
         else:
             raise ValidationError("Invalid username or password")
 
-    auth_url = _build_auth_url(scopes=Config.SCOPE, state=session.get('state'))
+    auth_url = _build_auth_url(scopes=Config.SCOPE, state=session["state"])
     print("##############################################")
     print(auth_url)
     print("##############################################")
@@ -62,11 +63,9 @@ def _build_msal_app(cache=None, authority=None):
 
 
 def _build_auth_url(authority=None, scopes=None, state=None):
-    uid = str(uuid.uuid4())
-    session["state"] = uid
     return _build_msal_app(authority=authority).get_authorization_request_url(
     scopes or [],
-    state=state or uid,
+    state=state or str(uuid.uuid4()),
     redirect_uri=url_for('account.authorized', _external=True, _scheme='https'))
 
 def _load_cache():
