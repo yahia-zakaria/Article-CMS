@@ -6,6 +6,7 @@ from models import User
 import msal
 from app.config import Config
 import uuid
+from app import app
 
 account_blueprint = Blueprint("account", __name__, template_folder="templates/")
 
@@ -24,6 +25,7 @@ def register():
 @account_blueprint.route('/login', methods=['GET', 'POST'])
 def login():
     form = LoginForm()
+    session['next'] = request.args.get('next')
     session["state"] = str(uuid.uuid4())
     if request.method == 'POST' and form.validate():
         user = User.get_user(form.username.data)
@@ -32,20 +34,22 @@ def login():
         
         if User.check_pass_hash(user[2], form.password.data):
             login_user(User(id= user[0], email=user[1], password=form.password.data))
-            next = request.args.get('next')
+            next = session.get('next')
             if next == None or not next[0] == '/':
                 next = url_for('posts.get_posts')
+            app.logger.info('local login user id: ' + user[1])
             return redirect(next)
         else:
             raise ValidationError("Invalid username or password")
 
     auth_url = _build_auth_url(scopes=Config.SCOPE, state=session["state"])
-    return render_template('login.html', form=form, title='Sign In', auth_url=auth_url)
+    return render_template('login.html', form=form, auth_url=auth_url)
 
 @account_blueprint.route('/logout', methods=['GET', 'POST'])
 @login_required
 def logout():
     logout_user()
+    session.clear()
     return redirect(url_for('account.login'))
 
 
@@ -87,10 +91,15 @@ def authorized():
     if 'error' in result:
         return render_template('auth_error.html', result=result)
     session['user'] = result.get('id_token_claims')
-    user = User(email=result.get("id_token_claims", {}).get("preferred_username"), password=str(uuid.uuid4()), id=str(uuid.uuid4()))
-    login_user(user)
+    uid = str(uuid.uuid4())
+    email = result.get("id_token_claims", {}).get("preferred_username")
+    user = User(email=email, password=uid, id=0)
+    session["user-email"] = email
+    session["user-password"] = uid
+    login_user(user=user, force=True)
     _save_cache(cache)
-    next = request.args.get('next')
+    next = session.get('next')
     if next == None or not next[0] == '/':
         next = url_for('posts.get_posts')
+    app.logger.info('external login user id: ' + email)
     return redirect(next)

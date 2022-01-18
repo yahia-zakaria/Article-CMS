@@ -90,7 +90,8 @@ class User(UserMixin):
         user = cursor.fetchone()
         cursor.close()
 
-        return User(id=user[0], email=user[1], password=user[2])
+        new_user = User(id=user[0], email=user[1], password=user[2])
+        return new_user
 
     def generate_pass_hash(self):
         return generate_password_hash(self.password)
