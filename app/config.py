@@ -1,6 +1,6 @@
 class Config(object):
   # In a production app, store this instead in KeyVault or an environment variable
-  CLIENT_SECRET = "cfc682a5-26f1-48fe-b7cf-fd64dfd8cc76" 
+  CLIENT_SECRET = "acc7Q~XgpULCvPRqO7MHxAvwqEfdwCIwK2e-2" 
   AUTHORITY = "https://login.microsoftonline.com/common" 
   # For multi-tenantаpp
   # AUTHORITY = "https://login.microsoftonline.com/Enter the_Tenant_Name_Here"

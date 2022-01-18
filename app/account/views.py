@@ -40,9 +40,6 @@ def login():
             raise ValidationError("Invalid username or password")
 
     auth_url = _build_auth_url(scopes=Config.SCOPE, state=session["state"])
-    print("##############################################")
-    print(auth_url)
-    print("##############################################")
     return render_template('login.html', form=form, title='Sign In', auth_url=auth_url)
 
 @account_blueprint.route('/logout', methods=['GET', 'POST'])
@@ -77,9 +74,9 @@ def _load_cache():
 @account_blueprint.route(Config.REDIRECT_PATH) # Its absolute URL must match your app's
 def authorized():
   if request.args.get('state') != session.get('state'):
-   return redirect(url_for('account.login')) # Failed, go back home
-  if 'error' in request.args: # Authentication/Authorization failure
-    return render_template('auth_error.html', result=request.args)
+      return redirect(url_for('account.login')) # Failed, go back home
+  if 'error' in request.args:
+      return render_template('auth_error.html', result=request.args)
   if request.args.get('code'):
     cache = _load_cache()
     result = _build_msal_app(cache=cache).acquire_token_by_authorization_code(
@@ -88,8 +85,12 @@ def authorized():
      redirect_uri=url_for('account.authorized', _external=True, _scheme='https'))
          
     if 'error' in result:
-      return render_template('auth_error.html', result=result)
+        return render_template('auth_error.html', result=result)
     session['user'] = result.get('id_token_claims')
     user = User(email=result.get("id_token_claims", {}).get("preferred_username"), password=str(uuid.uuid4()), id=str(uuid.uuid4()))
     login_user(user)
     _save_cache(cache)
+    next = request.args.get('next')
+    if next == None or not next[0] == '/':
+        next = url_for('posts.get_posts')
+    return redirect(next)
