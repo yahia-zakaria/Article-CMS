@@ -19,7 +19,13 @@
         </div>
         <p style="text-align:center"> OR  </p>
         {{form.username(class="form-control mb-1", placeholder="Email address", autofocus="")}}
+        {% for error in form.username.errors %}
+        <span style="color: red;">[{{ error }}]</span>
+        {% endfor %}
         {{form.password(class="form-control mb-1", placeholder="password", autofocus="")}}
+        {% for error in form.password.errors %}
+        <span style="color: red;">[{{ error }}]</span>
+        {% endfor %}
         {{form.submit(class="btn btn-success btn-block mb-1")}}
         <hr>
         <!-- <p>Don't have an account!</p>  -->

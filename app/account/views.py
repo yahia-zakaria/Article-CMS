@@ -31,7 +31,8 @@ def login():
         user = User.get_user(form.username.data)
         if user == None:
             app.logger.warning('Invalid login attempt')
-            raise ValidationError("Invalid username or password")
+            flash('Invalid username or password')
+            return redirect(url_for('account.login'))
         
         if User.check_pass_hash(user[2], form.password.data):
             login_user(User(id= user[0], email=user[1], password=form.password.data))
@@ -41,7 +42,7 @@ def login():
             app.logger.info('admin logged in successfully')
             return redirect(next)
         else:
-            raise ValidationError("Invalid username or password")
+            return redirect(url_for('account.login'))
 
     auth_url = _build_auth_url(scopes=Config.SCOPE, state=session["state"])
     return render_template('login.html', form=form, auth_url=auth_url)
