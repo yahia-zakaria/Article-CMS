@@ -30,14 +30,14 @@ def login():
     if request.method == 'POST' and form.validate():
         user = User.get_user(form.username.data)
         if user == None:
-            raise ValidationError("Invalid username or password")
+            app.logger.warning('Invalid login attempt')
         
         if User.check_pass_hash(user[2], form.password.data):
             login_user(User(id= user[0], email=user[1], password=form.password.data))
             next = session.get('next')
             if next == None or not next[0] == '/':
                 next = url_for('posts.get_posts')
-            app.logger.info('local login user id: ' + user[1])
+            app.logger.info('admin logged in successfully')
             return redirect(next)
         else:
             raise ValidationError("Invalid username or password")
