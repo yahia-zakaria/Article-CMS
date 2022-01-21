@@ -31,6 +31,7 @@ def login():
         user = User.get_user(form.username.data)
         if user == None:
             app.logger.warning('Invalid login attempt')
+            raise ValidationError("Invalid username or password")
         
         if User.check_pass_hash(user[2], form.password.data):
             login_user(User(id= user[0], email=user[1], password=form.password.data))
